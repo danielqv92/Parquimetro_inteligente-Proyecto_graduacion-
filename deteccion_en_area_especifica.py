@@ -18,28 +18,25 @@ import numpy as np
 #Crear el clasificador para automoviles
 clasificador_autos = cv2.CascadeClassifier('Haarcascades/cars.xml')
 
-#Variables globales para la funcion dibujar_rect_mouse
+#Variables globales para la funcion dibujar_rect_mouse/// borrar esto...
 dibujando = False
 punto1 = ()
 punto2 = ()
 
 
-#Funcion que 
+############################...Funciones...#############################
+
+'''
+Funcion que imprime en consola la posicion del puntero al mover el mouse
+sobre el cuadro de la imagen
+''' 
 def coordenada_puntero(evento, x, y, banderas, parametros):
     global punto1, punto2, dibujando
-    #if evento == cv2.EVENT_LBUTTONDOWN:
-    #    if dibujando is False:
-    #        dibujando = True
-    #        punto1 = (x,y)
-    #    else:
-    #        dibujando = False
-    #elif evento == cv2.EVENT_MOUSEMOVE:
-    #    if dibujando is True:
-    #        punto2 = (x,y)
    
     if evento == cv2.EVENT_MOUSEMOVE: 
        print "X: {} || Y: {}".format(x,y)
 
+########################################################################
 cv2.namedWindow('Cuadro')
 cv2.setMouseCallback('Cuadro', coordenada_puntero)
 
@@ -53,6 +50,7 @@ while captura.isOpened():
     #time.sleep(.05)            #time sleep para ver el video más lento
     # Lee el primer cuadro:
     ret, cuadro = captura.read() #captura cuadro por cuadro
+    
     
     """if ret:
         gris = cv2.cvtColor(cuadro, cv2.COLOR_BGR2GRAY)
@@ -72,6 +70,26 @@ while captura.isOpened():
     
     #Si hay captura entonces ret=True
     if ret:
+        
+        gris = cv2.cvtColor(cuadro, cv2.COLOR_BGR2GRAY)
+
+        # Pasa el cuadro por nuestro clasificador de autos
+        autos = clasificador_autos.detectMultiScale(gris, 1.4, 2)
+        
+        x_1 = 228
+        y_1 = 114
+        x_2 = 264
+        y_2 = 155
+        
+        cv2.rectangle(cuadro, (x_1, y_1), (x_2, y_2), (0, 0, 255), 2)
+        
+        
+        
+
+        # Dibujar un rectangulo donde se identifique un auto
+        for (x,y,w,h) in autos:
+            cv2.rectangle(cuadro, (x, y), (x+w, y+h), (0, 255, 255), 2)
+            
         cv2.imshow('Cuadro', cuadro)
         #cv2.waitKey()
         

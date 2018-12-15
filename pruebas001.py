@@ -1,6 +1,6 @@
 # coding=utf-8
 """
-Fecha:07 de octubre del 2018
+Fecha:13 de diciembre del 2018
 
 @author: Daniel Quesada Vindas
 
@@ -12,10 +12,10 @@ import time
 import numpy as np
 
 #Crear el clasificador para automoviles
-clasificador_autos = cv2.CascadeClassifier('Haarcascades/haarcascade_car.xml')
+clasificador_autos = cv2.CascadeClassifier('Haarcascades/cars.xml')
 
 #Iniciar video captura de un archivo de video para pruebas
-captura = cv2.VideoCapture('/home/daniel/MEGAsync/Proyecto de graduación/git/images/cars.avi')
+captura = cv2.VideoCapture('images/cars.avi')
 
 #Si el video abre correctamente se inicia el siguiente loop
 while captura.isOpened():
