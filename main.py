@@ -18,6 +18,8 @@ import menu                      #importa el script menu.py que contiene el menu
 import video_camara as vidcam    #script que muestra el video en tiempo real (para tomar datos de posicion)
 import menu_espacios as esp      #script que guarda la cantidad de espacios de estacionamiento y los parametros de cada uno
 
+#script que contiene el codigo necesario para detectar vehiculos dentro de los espacios definidos:
+import deteccion_en_area_especifica as deteccion    
 
 
                             
@@ -47,11 +49,18 @@ while True:
             
         else:
             print'Ocurrio un error...'
+        
+        enter_pr = raw_input("Presione la tecla enter para continuar")
+        
         menu.func_menu_opciones()
         
     elif entrada == '3':
-        print entrada
-        time.sleep(2)
+        #print entrada
+        #time.sleep(2)
+        
+        #llama a la funcion de deteccion de vehiculos en un area definida (espacios de estacionamiento)
+        deteccion.func_deteccion_vehiculos()    
+        
         menu.func_menu_opciones()
     
     elif entrada == 'cerrar':

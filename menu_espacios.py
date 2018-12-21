@@ -24,6 +24,7 @@ class espacio_estacionamiento:
 
 
 def cant_espacios():
+	global n_esp
 	n_esp = input("Digite la cantidad de espacios de estacionamiento a configurar: ")
 
 	#Aca se debe de introducir los parametros de cada espacio de 1 hasta n_esp:
@@ -50,13 +51,16 @@ def cant_espacios():
 		m =  raw_input("Digite y_2 del espacio {}: ".format(i) )
 		globals()['y2_%s'% i] = m
 
+  
 	for i in range(1,n_esp+1):
 		#print "id_{}".format(i), ":"
 		#print globals()['id_%s'% i]
 		
 		#Crea los espacios utilizando clases
 		globals()['espacio_%s'% i] = espacio_estacionamiento(globals()['id_%s'% i], globals()['est_%s'% i], globals()['x1_%s'% i], globals()['y1_%s'% i], globals()['x2_%s'% i], globals()['y2_%s'% i])
-		return 1	#regresa 1 si se completa el proceso
+	
+	return 1	#regresa 1 si se completa el proceso
+	
 	
 #print id_1
 #print id_2

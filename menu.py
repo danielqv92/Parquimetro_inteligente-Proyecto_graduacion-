@@ -10,8 +10,11 @@ Fecha:18 de diciembre del 2018
 """
 
 import time
-import os               #para funciones del sistema (linux en este caso)--> limpiar pantalla se usara
-from tqdm import tqdm   #para la barra de progreso--pip install tqdm--repositorio en github
+import os                       #para funciones del sistema (linux en este caso)--> limpiar pantalla se usara
+from tqdm import tqdm           #para la barra de progreso--pip install tqdm--repositorio en github
+import menu_espacios as esp     #script que guarda la cantidad de espacios de estacionamiento y los parametros de cada uno
+
+
 
 def func_menu_inicial():
     print'\n\n'
@@ -101,6 +104,12 @@ def func_menu_opciones():
     print'\n'
     time.sleep(0.33)
     print'NOTA: presione la tecla Q para salir de cualquiera de las opciones que seleccione'
+    print'\n'
+    time.sleep(0.33)
+    try:
+        print"Espacios de estacionamiento configurados: {}".format(esp.n_esp)
+    except:
+        print"Espacios de estacionamiento configurados: {}".format(0)
     print'\n\n\n'
     time.sleep(0.33)
     print'1. Mostrar video en tiempo real'
@@ -116,6 +125,7 @@ def func_menu_opciones():
 def cerrando_logo():
         os.system('clear')
         time.sleep(0.5)
+        print'\n\n\n'
         print' ██████╗███████╗██████╗ ██████╗  █████╗ ███╗   ██╗██████╗  ██████╗          '
         print'██╔════╝██╔════╝██╔══██╗██╔══██╗██╔══██╗████╗  ██║██╔══██╗██╔═══██╗         '
         print'██║     █████╗  ██████╔╝██████╔╝███████║██╔██╗ ██║██║  ██║██║   ██║         '
@@ -124,6 +134,7 @@ def cerrando_logo():
         print' ╚═════╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═════╝  ╚═════╝ ╚═╝      '
         time.sleep(0.5)
         os.system('clear')
+        print'\n\n\n'
         print' ██████╗███████╗██████╗ ██████╗  █████╗ ███╗   ██╗██████╗  ██████╗          '
         print'██╔════╝██╔════╝██╔══██╗██╔══██╗██╔══██╗████╗  ██║██╔══██╗██╔═══██╗         '
         print'██║     █████╗  ██████╔╝██████╔╝███████║██╔██╗ ██║██║  ██║██║   ██║         '
@@ -132,6 +143,7 @@ def cerrando_logo():
         print' ╚═════╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═════╝  ╚═════╝ ╚═╝╚═╝   '
         time.sleep(0.5)
         os.system('clear')
+        print'\n\n\n'
         print' ██████╗███████╗██████╗ ██████╗  █████╗ ███╗   ██╗██████╗  ██████╗          '
         print'██╔════╝██╔════╝██╔══██╗██╔══██╗██╔══██╗████╗  ██║██╔══██╗██╔═══██╗         '
         print'██║     █████╗  ██████╔╝██████╔╝███████║██╔██╗ ██║██║  ██║██║   ██║         '
