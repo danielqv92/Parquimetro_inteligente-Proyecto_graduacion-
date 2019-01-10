@@ -62,17 +62,4 @@ def cant_espacios():
 	return 1	#regresa 1 si se completa el proceso
 	
 	
-#print id_1
-#print id_2
 
-#espacio_1 = espacio_estacionamiento(101, True, 228, 114, 264, 155)
-
-
-
-
-#print espacio_1.id_espacio
-#print espacio_1.estado
-#print espacio_1.x_1
-#print espacio_1.y_1
-#print espacio_1.x_2
-#print espacio_1.y_2

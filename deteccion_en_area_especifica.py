@@ -30,29 +30,29 @@ def func_deteccion_vehiculos():
 	cv2.namedWindow('Cuadro')
 
 	#Iniciar video captura de un archivo de video para pruebas
-	captura = cv2.VideoCapture('images/cars.avi')
+	#captura = cv2.VideoCapture('http://79.9.140.50:82/mjpg/video.mjpg')
+	
+	captura = cv2.VideoCapture('http://138.26.107.148/mjpg/video.mjpg?timestamp=1546935659075')
+	
+	#captura = cv2.VideoCapture('images/parqueo.mp4')
 
 	#Si el video abre correctamente se inicia el siguiente loop
 	while captura.isOpened():
 
-		#time.sleep(.05)            #time sleep para ver el video más lento
+		time.sleep(.5)            #time sleep para ver el video más lento
 		# Lee el primer cuadro:
 		ret, cuadro = captura.read() #captura cuadro por cuadro
 		
+		#Filtros:
+		cuadro = cv2.GaussianBlur(cuadro,(5,5),0)
 		
-		"""if ret:
-			gris = cv2.cvtColor(cuadro, cv2.COLOR_BGR2GRAY)
-
-			# Pasa el cuadro por nuestro clasificador de autos
-			autos = clasificador_autos.detectMultiScale(gris, 1.4, 2)
-
-			# Dibujar un rectangulo donde se identifique un auto
-			for (x,y,w,h) in autos:
-				cv2.rectangle(cuadro, (x, y), (x+w, y+h), (0, 255, 255), 2)
-				
-				cv2.imshow('Autos', cuadro)
-				cv2.waitKey()
-		"""
+		#Rescalar la imagen:
+		porcentaje = 60
+		ancho =  int(cuadro.shape[1] * porcentaje/100)
+		alto =  int(cuadro.shape[0] * porcentaje/100)
+		dimensiones = (ancho, alto)
+		cuadro = cv2.resize(cuadro, dimensiones, interpolation = cv2.INTER_AREA)
+			
 		#if punto1 and punto2:
 		#    cv2.rectangle(cuadro, punto1, punto2, (0, 255, 0),2)
 		
@@ -60,16 +60,14 @@ def func_deteccion_vehiculos():
 		if ret:
 			
 			gris = cv2.cvtColor(cuadro, cv2.COLOR_BGR2GRAY)
-
-			# Pasa el cuadro por nuestro clasificador de autos
-			autos = clasificador_autos.detectMultiScale(gris, 1.4, 2)
 			
-			#x_1 = 228
-			#y_1 = 114
-			#x_2 = 264
-			#y_2 = 155
-			#cv2.rectangle(cuadro, (x_1, y_1), (x_2, y_2), (0, 0, 255), 2)
-
+			
+			#for c in range (0,11):
+				
+			# Pasa el cuadro por nuestro clasificador de autos
+			autos = clasificador_autos.detectMultiScale(gris, 1.1, 1)
+			
+			
 			'''
 			 Si identifica autos devolvera las coordenadas (x,y), ademas de el ancho y el alto del area de deteccion.
 			 Primero se dibujara un rectangulo alrededor de dichas coordenadas y luego se comparara si parte de este 
@@ -81,7 +79,19 @@ def func_deteccion_vehiculos():
 				esp.n_esp = esp.n_esp
 			except:
 				print"Error: Debe de configurar primero los espacios de estacionamiento"
+				time.sleep(3)
 				return 2	#retorna un 2 en caso de que n_esp que es la cantidad de espacios no se haya definido y termina la funcion
+			
+			#dibuja cuadros donde se configuraron los espacios de estacionamiento
+			for i in range(1,esp.n_esp+1):
+					#Se deben de pasar los string a enteros para realizar comparaciones matematicas...
+					x_1 = int(eval('esp.espacio_%s.x_1'% i))
+					y_1 = int(eval('esp.espacio_%s.y_1'% i))
+					x_2 = int(eval('esp.espacio_%s.x_2'% i))
+					y_2 = int(eval('esp.espacio_%s.y_2'% i))
+					cv2.rectangle(cuadro, (x_1, y_1), (x_2, y_2), (255, 0, 0), 2)	
+			
+				
 			for (x,y,w,h) in autos:
 				cv2.rectangle(cuadro, (x, y), (x+w, y+h), (0, 255, 255), 2)		#dibuja un rectangulo donde detecta vehiculo
 				
@@ -95,7 +105,7 @@ def func_deteccion_vehiculos():
 					y_2 = int(eval('esp.espacio_%s.y_2'% i))
 					x2 = x + w
 					y2 = y + h
-					
+					#cv2.rectangle(cuadro, (x_1, y_1), (x_2, y_2), (255, 0, 0), 2)	
 					#Caso unico si se busca que el auto este totalmente dentro del espacio de estacionamiento
 					#if x>x_1 and y>y_1 and x2<x_2 and y2<y_2:
 					#	print 'Carro'
@@ -135,8 +145,10 @@ def func_deteccion_vehiculos():
 			
 		#Si el video se termina    
 		elif ret==False:    
-			captura = cv2.VideoCapture('images/cars.avi')   #Descomentar para enciclar el video
-			#break                                          #Descomentar y comentar linea anterior para quebrar el while cuando termina el video...
+			#captura = cv2.VideoCapture('images/cars.avi')   #Descomentar para enciclar el video
+			print("ERROR: se detuvo la conexion con la camara")
+			time.sleep(5)
+			break                                          #Descomentar y comentar linea anterior para quebrar el while cuando termina el video...
 				
 
 		#si se presiona la tecla de ord('tecla') entonces:

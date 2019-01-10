@@ -37,14 +37,27 @@ def func_video_camara():
 	cv2.setMouseCallback('Cuadro', coordenada_puntero)
 
 	#Iniciar video captura de un archivo de video para pruebas
-	captura = cv2.VideoCapture('images/cars.avi')
-
+	#captura = cv2.VideoCapture('http://79.9.140.50:82/mjpg/video.mjpg')
+	
+	captura = cv2.VideoCapture('http://138.26.107.148/mjpg/video.mjpg?timestamp=1546935659075')
+	#captura = cv2.VideoCapture('images/parqueo.mp4')
+	
 	#Si el video abre correctamente se inicia el siguiente loop
 	while captura.isOpened():
 
 		#time.sleep(.05)            #time sleep para ver el video más lento
 		# Lee el primer cuadro:
 		ret, cuadro = captura.read() #captura cuadro por cuadro
+		
+		#Filtros:
+		cuadro = cv2.GaussianBlur(cuadro,(5,5),0)
+		
+		#Rescalar la imagen:
+		porcentaje = 60
+		ancho =  int(cuadro.shape[1] * porcentaje/100)
+		alto =  int(cuadro.shape[0] * porcentaje/100)
+		dimensiones = (ancho, alto)
+		cuadro = cv2.resize(cuadro, dimensiones, interpolation = cv2.INTER_AREA)
 		
 		#Si hay captura entonces ret=True
 		if ret:
@@ -54,8 +67,10 @@ def func_video_camara():
 			
 		#Si el video se termina    
 		elif ret==False:    
-			captura = cv2.VideoCapture('images/cars.avi')   #Descomentar para enciclar el video
-			#break                                          #Descomentar y comentar linea anterior para quebrar el while cuando termina el video...
+			#captura = cv2.VideoCapture('images/cars.avi')   #Descomentar para enciclar el video
+			print("ERROR: se detuvo la conexion con la camara")
+			time.sleep(5)
+			break                                          #Descomentar y comentar linea anterior para quebrar el while cuando termina el video...
 				
 
 		#si se presiona la tecla de ord() entonces:
