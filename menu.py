@@ -17,7 +17,7 @@ import menu_espacios as esp     #script que guarda la cantidad de espacios de es
 
 
 def func_menu_inicial():
-    print'\n\n'
+    print'\n\n' 
     print'                                 _________'
     print'                          _.--\"\"\'-----,   `\"--.._'
     print'                       .-\'\'   _/_      ; .\'\"----,`-,'

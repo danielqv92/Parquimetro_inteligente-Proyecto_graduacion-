@@ -45,7 +45,7 @@ while True:
         
         if esp.cant_espacios() ==1:
             print'\n\nSe definieron los parametros satisfactoriamente...'
-            time.sleep(2)
+            time.sleep(2) 
             
         else:
             print'Ocurrio un error...'

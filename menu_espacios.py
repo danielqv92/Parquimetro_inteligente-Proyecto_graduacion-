@@ -63,7 +63,7 @@ def cant_espacios():
 		
 		m =  raw_input("Digite la latitud del espacio de estacionamiento: ".format(i) )
 		globals()['lat_%s'% i] = m
-		
+		 
 		m =  raw_input("Digite la longitud del espacio de estacionamiento: ".format(i) )
 		globals()['lon_%s'% i] = m
 

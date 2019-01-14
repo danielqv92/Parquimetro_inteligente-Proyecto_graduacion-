@@ -136,16 +136,16 @@ def func_deteccion_vehiculos():
 					if ubi.contador_hilos < esp.n_esp :
 					
 						#envia el estado del espacio de estacionamiento a ubidots:
-						hilo_ubidots = threading.Thread (target = ubi.enviar_ubidots, name=hilo, args = (ID, estado, latitud, longitud,))
+						hilo_ubidots = threading.Thread (target = ubi.enviar_ubidots, name= "hilo", args = (ID, estado, latitud, longitud,))
 						hilo_ubidots.start()	#inicia el thread 
 					
-					else	#esta condicion nunca deberia de ejecutarse...
+					else:	#esta condicion nunca deberia de ejecutarse...
 						print "Se evito que se crearan muchos hilos"
 						print ubi.contador_hilos
 			#luego de "dibujar" todos los rectangulos en un cuadro, muestra la imagen final:	
 			cv2.imshow('cuadro', cuadro)
 			#cv2.waitKey()
-			
+			 
 			
 			
 		#Si el video se termina    
