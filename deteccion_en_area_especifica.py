@@ -15,11 +15,14 @@ import cv2
 import time
 import numpy as np
 import menu_espacios as esp     #script que guarda la cantidad de espacios de estacionamiento y los parametros de cada uno
+import ubidots_parking as ubi	#script que se encarga de enviar y recibir datos de la nube, en este caso de ubidots
+import threading				#para utilizar hilos --> threads
 
 #Clasificador para automoviles
 clasificador_autos = cv2.CascadeClassifier('Haarcascades/autos_cascade.xml')
 
 
+	
 ############################...Funciones...#############################
 
 
@@ -40,7 +43,8 @@ def func_deteccion_vehiculos():
 	#Si el video abre correctamente se inicia el siguiente loop
 	while captura.isOpened():
 
-		time.sleep(.5)            #time sleep para ver el video más lento
+		time.sleep(3)            #time sleep para ver el video más lento o menos captura de tomas en tiempo real
+		#ademas el delay funciona para no saturar el envio a la nube
 		# Lee el primer cuadro:
 		ret, cuadro = captura.read() #captura cuadro por cuadro
 		
@@ -87,17 +91,24 @@ def func_deteccion_vehiculos():
 			
 			#dibuja cuadros donde se configuraron los espacios de estacionamiento
 			for i in range(1,esp.n_esp+1):
+					
+					#Cargar la clase a variables:
 					#Se deben de pasar los string a enteros para realizar comparaciones matematicas...
+					ID = eval('esp.espacio_%s.id_espacio'% i)
+					#estado = int(eval('esp.espacio_%s.estado'% i))
+					
 					x_1 = int(eval('esp.espacio_%s.x_1'% i))
 					y_1 = int(eval('esp.espacio_%s.y_1'% i))
 					x_2 = int(eval('esp.espacio_%s.x_2'% i))
 					y_2 = int(eval('esp.espacio_%s.y_2'% i))
 					x_c = int(eval('esp.espacio_%s.x_c'% i))
 					y_c = int(eval('esp.espacio_%s.y_c'% i))
+					#coordenadas seran con flotantes porque tienen decimales
+					latitud = float(eval('esp.espacio_%s.latitud'% i))
+					longitud = float(eval('esp.espacio_%s.longitud'% i))			
 					
 					
-					
-					recorte = cuadro[y_1:y_2 , x_1:x_2]		#recorda la imagen --> imagen[y:y+h, x:x+w]
+					recorte = cuadro[y_1:y_2 , x_1:x_2]		#recorta la imagen --> imagen[y:y+h, x:x+w]
 					gris = cv2.cvtColor(recorte, cv2.COLOR_BGR2GRAY)
 					
 					#pinta un rectangulo verde en el area de deteccion, verde significa que esta desocupado
@@ -105,6 +116,7 @@ def func_deteccion_vehiculos():
 					#Clasificador
 					autos = clasificador_autos.detectMultiScale(gris, 1.03, 2)
 					
+					estado = False	#bandera de deteccion, declarada como True y si detecta se cambia a True
 					#si detecta el objeto devuelve las coordenadas:
 					for (x,y,w,h) in autos:
 						x2 = x + w	#coordenada x
@@ -116,10 +128,20 @@ def func_deteccion_vehiculos():
 							print "Si calza con x"
 							if y2>x_c>y:
 								print "Tambien con y"
+								estado = True				#detecto un auto en el punto especificado!
 								#pinta un rectangulo rojo en el area de deteccion, rojo significa que esta ocupado
 								cv2.rectangle(cuadro, (x_1, y_1), (x_2, y_2), (0, 0, 255), 2)
-								
 					
+					#para evitar que se creen muchos hilos y por lo tanto evitar que se envie un dato al mismo tiempo se coloca la siguiente condicion:
+					if ubi.contador_hilos < esp.n_esp :
+					
+						#envia el estado del espacio de estacionamiento a ubidots:
+						hilo_ubidots = threading.Thread (target = ubi.enviar_ubidots, name=hilo, args = (ID, estado, latitud, longitud,))
+						hilo_ubidots.start()	#inicia el thread 
+					
+					else	#esta condicion nunca deberia de ejecutarse...
+						print "Se evito que se crearan muchos hilos"
+						print ubi.contador_hilos
 			#luego de "dibujar" todos los rectangulos en un cuadro, muestra la imagen final:	
 			cv2.imshow('cuadro', cuadro)
 			#cv2.waitKey()

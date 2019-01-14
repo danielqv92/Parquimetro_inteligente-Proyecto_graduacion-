@@ -11,7 +11,7 @@ Fecha:18 de diciembre del 2018
 """
 class espacio_estacionamiento:
 	
-	def __init__(self, id_espacio, estado, x_1, y_1, x_2, y_2, x_c, y_c):
+	def __init__(self, id_espacio, estado, x_1, y_1, x_2, y_2, x_c, y_c, latitud, longitud):
 		self.id_espacio = id_espacio
 		self.estado = estado
 		self.x_1 = x_1
@@ -20,6 +20,8 @@ class espacio_estacionamiento:
 		self.y_2 = y_2
 		self.x_c = x_c
 		self.y_c = y_c
+		self.latitud = latitud
+		self.longitud = longitud
 
 
 #Menu para los espacios de estacionamiento:
@@ -38,8 +40,8 @@ def cant_espacios():
 		m =  raw_input("\nDigite id del espacio {}: ".format(i) )
 		globals()['id_%s'% i] = m					
 		
-		m =  raw_input("Digite estado del espacio {}: ".format(i) )
-		globals()['est_%s'% i] = m
+		#m =  raw_input("Digite estado del espacio {}: ".format(i) )
+		globals()['est_%s'% i] = False		#siempre que se declara un espacio su estado sera falso...En realidad a este punto no importa
 		
 		m =  raw_input("Digite x_1 del espacio {}: ".format(i) )
 		globals()['x1_%s'% i] = m
@@ -58,7 +60,12 @@ def cant_espacios():
 		
 		m =  raw_input("Digite la coordenada en y del centro del espacio: ".format(i) )
 		globals()['y_c_%s'% i] = m
-
+		
+		m =  raw_input("Digite la latitud del espacio de estacionamiento: ".format(i) )
+		globals()['lat_%s'% i] = m
+		
+		m =  raw_input("Digite la longitud del espacio de estacionamiento: ".format(i) )
+		globals()['lon_%s'% i] = m
 
   
 	for i in range(1,n_esp+1):
@@ -66,7 +73,7 @@ def cant_espacios():
 		#print globals()['id_%s'% i]
 		
 		#Crea los espacios utilizando clases
-		globals()['espacio_%s'% i] = espacio_estacionamiento(globals()['id_%s'% i], globals()['est_%s'% i], globals()['x1_%s'% i], globals()['y1_%s'% i], globals()['x2_%s'% i], globals()['y2_%s'% i], globals()['x_c_%s'% i], globals()['y_c_%s'% i])
+		globals()['espacio_%s'% i] = espacio_estacionamiento(globals()['id_%s'% i], globals()['est_%s'% i], globals()['x1_%s'% i], globals()['y1_%s'% i], globals()['x2_%s'% i], globals()['y2_%s'% i], globals()['x_c_%s'% i], globals()['y_c_%s'% i],globals()['lat_%s'% i], globals()['lon_%s'% i])
 	
 	return 1	#regresa 1 si se completa el proceso
 	
