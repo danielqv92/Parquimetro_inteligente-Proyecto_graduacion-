@@ -60,14 +60,14 @@ while True:
         deteccion.func_deteccion_vehiculos()    
         menu.func_menu_opciones()
     
-	elif entrada == '4':	#definir parametros
-		deteccion.parametros_insert()
-		time.sleep(0.33)
-		menu.func_menu_opciones()
-		
-	elif entrada == '5':	#Deteccion en modo consola
-		deteccion.func_deteccion_vehiculos_consola()
-		menu.func_menu_opciones()
+    elif entrada == '4':	#definir parametros
+	deteccion.parametros_insert()
+	time.sleep(0.33)
+	menu.func_menu_opciones()
+	    
+    elif entrada == '5':	#Deteccion en modo consola
+	deteccion.func_deteccion_vehiculos_consola()
+	menu.func_menu_opciones()
 		
     elif entrada == 'cerrar':
         menu.cerrando_logo()
@@ -75,7 +75,7 @@ while True:
     
     else:
         print 'ERROR: Entrada invalida!'
-		print "/n"
+	print "\n"
         time.sleep(1)
           
     

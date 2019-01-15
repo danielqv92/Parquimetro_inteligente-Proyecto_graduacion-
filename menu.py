@@ -17,6 +17,11 @@ import menu_espacios as esp     #script que guarda la cantidad de espacios de es
 
 
 def func_menu_inicial():
+    os.system('clear')
+    #Barra de progreso que realmente no sirve para nada...
+    for i in tqdm(range(20)):
+        time.sleep(0.05)
+    os.system('clear')
     print'\n\n' 
     print'                                 _________'
     print'                          _.--\"\"\'-----,   `\"--.._'
@@ -118,9 +123,9 @@ def func_menu_opciones():
     time.sleep(0.2)
     print'3. Iniciar deteccion de vehiculos [modo grafico] (Opcion 2 obligatoria)'
     time.sleep(0.2)
-	print'4. Definir parametros (% video || IP || )'
+    print'4. Definir parametros (% video || IP || )'
     time.sleep(0.2)
-	print'5. Iniciar deteccion de vehiculos [modo consola] (Opcion 2 obligatoria)'
+    print'5. Iniciar deteccion de vehiculos [modo consola] (Opcion 2 obligatoria)'
     time.sleep(0.2)
     print'\n'
     print'...o ingrese \"cerrar\" para cerrar el programa\n'

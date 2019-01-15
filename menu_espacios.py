@@ -9,6 +9,8 @@ Fecha:18 de diciembre del 2018
 
 @Funcion:Menu para los espacios de estacionamiento, aqui hay una clase para guardar los parametros de cada espacio 
 """
+import time
+
 class espacio_estacionamiento:
 	
 	def __init__(self, id_espacio, estado, x_1, y_1, x_2, y_2, x_c, y_c, latitud, longitud):
@@ -29,16 +31,26 @@ class espacio_estacionamiento:
 
 def cant_espacios():
 	global n_esp
-	n_esp = input("Digite la cantidad de espacios de estacionamiento a configurar: ")
-
+	print "\nPara cancelar y regresar al menu principal solamente digite la palabra \"cancelar\" y presione enter"
+	k = raw_input("\nDigite la cantidad de espacios de estacionamiento a configurar: ")
+	if k == 'cancelar':
+		n_esp = 0
+		return 3
+	try:
+		n_esp = int(k)
+	except:
+		print "ERROR: la cantidad debe ser un numero entero"
+		time.sleep (2)
+		cant_espacios()
 	#Aca se debe de introducir los parametros de cada espacio de 1 hasta n_esp:
 
 	for i in range(1,n_esp+1):	#de 1 a n_esp+1 para que cuente el ultimo entero
 		
 		'''se declaran variables de 1 hasta la cantidad de espacios disponibles para guardar 
 		los parametros a definir por el usuario'''
+		
 		m =  raw_input("\nDigite id del espacio {}: ".format(i) )
-	    if m=='cancelar': 
+		if m=='cancelar': 
 			return 3	#si se selecciona cancelar entonces cierra y retorna 3
 		else:
 			globals()['id_%s'% i] = m					

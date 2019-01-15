@@ -54,8 +54,8 @@ def func_deteccion_vehiculos():
 		
 		#Rescalar la imagen:
 		
-		ancho =  int(cuadro.shape[1] * porc_video/100)
-		alto =  int(cuadro.shape[0] * porc_video/100)
+		ancho =  int(cuadro.shape[1] * int(porc_video)/100)
+		alto =  int(cuadro.shape[0] * int(porc_video)/100)
 		dimensiones = (ancho, alto)
 		cuadro = cv2.resize(cuadro, dimensiones, interpolation = cv2.INTER_AREA)
 			
@@ -89,6 +89,10 @@ def func_deteccion_vehiculos():
 				print"Error: Debe de configurar primero los espacios de estacionamiento"
 				time.sleep(3)
 				return 2	#retorna un 2 en caso de que n_esp que es la cantidad de espacios no se haya definido y termina la funcion
+			if esp.n_esp ==0:
+				print"Error: Debe de configurar primero al menos un espacio de estacionamiento"
+				time.sleep(3)
+				return 2	#retorna un 2 en caso de que n_esp que es la cantidad de espacios no se haya definido y termina la funcion
 			
 			#dibuja cuadros donde se configuraron los espacios de estacionamiento
 			for i in range(1,esp.n_esp+1):
@@ -117,7 +121,7 @@ def func_deteccion_vehiculos():
 					#Clasificador
 					autos = clasificador_autos.detectMultiScale(gris, 1.03, 2)
 					
-					estado = False	#bandera de deteccion, declarada como True y si detecta se cambia a True
+					estado = 0	#Estado del espacio de estacionamiento...
 					#si detecta el objeto devuelve las coordenadas:
 					for (x,y,w,h) in autos:
 						x2 = x + w	#coordenada x
@@ -129,7 +133,7 @@ def func_deteccion_vehiculos():
 							print "Si calza con x"
 							if y2>x_c>y:
 								print "Tambien con y"
-								estado = True				#detecto un auto en el punto especificado!
+								estado = 1			#detecto un auto en el punto especificado!
 								#pinta un rectangulo rojo en el area de deteccion, rojo significa que esta ocupado
 								cv2.rectangle(cuadro, (x_1, y_1), (x_2, y_2), (0, 0, 255), 2)
 					
@@ -171,11 +175,30 @@ def func_deteccion_vehiculos():
 def parametros_insert():
 	global porc_video, ip_det
 	time.sleep(0.3)
+	print "\n--------------------------------------------------"
 	print "Valores por defecto:"
 	print "Porcentaje de video: {}".format(porc_video)
 	print "IP: {}".format(ip_det)
-	porc_video = raw_input("Inserte el porcentaje del total del video que desea visualizar : ")
-	ip_det = raw_input("Inserte la IP del video: ")
+	print "\nOpciones:"
+	print "1. Porcentaje de video \n2. IP de la camara\n3. Cancelar"
+	k = True
+	while k:	#con un while True basta pero por si las dudas...
+		opcion = int(raw_input("Digite una opcion valida:"))
+		if opcion == 1:
+			porc_video = raw_input("Inserte el porcentaje del total del video que desea visualizar : ")
+			k = False
+			return 0
+		elif opcion == 2:
+			ip_det = raw_input("Inserte la IP del video: ")
+			k = False
+			return 0
+		elif opcion == 3:
+			print "Cancelando..."
+			time.sleep(2)
+			k = False
+			return 1
+		else:
+			print "ERROR: no existe esa opcion..."
 	return 0
 	
 	
@@ -206,8 +229,8 @@ def func_deteccion_vehiculos_consola():
 		
 		#Rescalar la imagen:
 		
-		ancho =  int(cuadro.shape[1] * porc_video/100)
-		alto =  int(cuadro.shape[0] * porc_video/100)
+		ancho =  int(cuadro.shape[1] * int(porc_video)/100)
+		alto =  int(cuadro.shape[0] * int(porc_video)/100)
 		dimensiones = (ancho, alto)
 		cuadro = cv2.resize(cuadro, dimensiones, interpolation = cv2.INTER_AREA)
 			
@@ -241,6 +264,10 @@ def func_deteccion_vehiculos_consola():
 				print"Error: Debe de configurar primero los espacios de estacionamiento"
 				time.sleep(3)
 				return 2	#retorna un 2 en caso de que n_esp que es la cantidad de espacios no se haya definido y termina la funcion
+			if esp.n_esp ==0:
+				print"Error: Debe de configurar primero al menos un espacio de estacionamiento"
+				time.sleep(3)
+				return 2	#retorna un 2 en caso de que n_esp que es la cantidad de espacios no se haya definido y termina la funcion
 			
 			#dibuja cuadros donde se configuraron los espacios de estacionamiento
 			for i in range(1,esp.n_esp+1):
@@ -268,7 +295,7 @@ def func_deteccion_vehiculos_consola():
 					#Clasificador
 					autos = clasificador_autos.detectMultiScale(gris, 1.03, 2)
 					
-					estado = False	#bandera de deteccion, declarada como True y si detecta se cambia a True
+					estado = 0		#Estado del espacio de estacionamiento...
 					#si detecta el objeto devuelve las coordenadas:
 					for (x,y,w,h) in autos:
 						x2 = x + w	#coordenada x
@@ -279,7 +306,7 @@ def func_deteccion_vehiculos_consola():
 							print "Si calza con x"
 							if y2>x_c>y:
 								print "Tambien con y"
-								estado = True				#detecto un auto en el punto especificado!
+								estado = 1				#detecto un auto en el punto especificado!
 								
 					
 					#para evitar que se creen muchos hilos y por lo tanto evitar que se envie un dato al mismo tiempo se coloca la siguiente condicion:

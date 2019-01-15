@@ -56,8 +56,8 @@ def func_video_camara():
 		
 		#Rescalar la imagen:
 		porcentaje = 60
-		ancho =  int(cuadro.shape[1] * deteccion.porc_video/100)
-		alto =  int(cuadro.shape[0] * deteccion.porc_video/100)
+		ancho =  int(cuadro.shape[1] * int(deteccion.porc_video)/100)
+		alto =  int(cuadro.shape[0] * int(deteccion.porc_video)/100)
 		dimensiones = (ancho, alto)
 		cuadro = cv2.resize(cuadro, dimensiones, interpolation = cv2.INTER_AREA)
 		

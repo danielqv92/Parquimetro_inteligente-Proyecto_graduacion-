@@ -34,11 +34,15 @@ contador_hilos = 0	#usado para contar las veces que se esta ejecutando la funcio
 """ 
 def enviar_ubidots(ID, estado, latitud, longitud):
     global contador_hilos
+    print "\nID: {} || Estado: {}".format(ID, estado)
     contador_hilos += 1
     DEVICE_LABEL = ID	#ID del dispositivo, uno por cada espacio de estacionamiento
     variable1 = "estado"
     variable2 = "position"
-    payload = {variable1: estado, variable2: {"value": 1, "context": {"lat": latitud, "lng": longitud }}}	#payload a enviar
+    #TEST estado:
+    #estado = 1  #COMENTAR ESTA LINEA>>>>>>><<<<<<<<<<<<<COMENTAR ESTA LINEA
+    #se envia dos veces el estado para utilizar uno como indicador y otro como punto del mapa!
+    payload = {variable1: estado, variable2: {"value": estado, "context": {"lat": latitud, "lng": longitud }}}	#payload a enviar
 	
     # Creates the headers for the HTTP requests
     url = "http://things.ubidots.com"
