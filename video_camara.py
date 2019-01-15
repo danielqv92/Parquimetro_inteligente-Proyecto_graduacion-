@@ -14,6 +14,8 @@ Fecha:14 de diciembre del 2018
 import cv2
 import time
 import numpy as np
+#script que contiene el codigo necesario para detectar vehiculos dentro de los espacios definidos:
+import deteccion_en_area_especifica as deteccion    
 
 
 
@@ -39,7 +41,7 @@ def func_video_camara():
 	#Iniciar video captura de un archivo de video para pruebas
 	#captura = cv2.VideoCapture('http://87.243.137.233/axis-cgi/mjpg/video.cgi?camera=?resolution=640x480')
 	
-	captura = cv2.VideoCapture('http://138.26.107.148/mjpg/video.mjpg?timestamp=1546935659075')
+	captura = cv2.VideoCapture(deteccion.ip_det)
 	#captura = cv2.VideoCapture('images/parqueo.mp4')
 	
 	#Si el video abre correctamente se inicia el siguiente loop
@@ -54,8 +56,8 @@ def func_video_camara():
 		
 		#Rescalar la imagen:
 		porcentaje = 60
-		ancho =  int(cuadro.shape[1] * porcentaje/100)
-		alto =  int(cuadro.shape[0] * porcentaje/100)
+		ancho =  int(cuadro.shape[1] * deteccion.porc_video/100)
+		alto =  int(cuadro.shape[0] * deteccion.porc_video/100)
 		dimensiones = (ancho, alto)
 		cuadro = cv2.resize(cuadro, dimensiones, interpolation = cv2.INTER_AREA)
 		

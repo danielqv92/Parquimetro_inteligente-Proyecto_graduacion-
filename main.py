@@ -29,12 +29,11 @@ import deteccion_en_area_especifica as deteccion
 menu.func_menu_inicial()        #Llama al menu inicial
 menu.func_menu_opciones()       #Menu con las opciones
 
+#MAIN:
 while True:
     
-    
     #luego de mostrar el menu con las opciones:
-    entrada = raw_input("Digite una opcion valida: ")   #raw_input siempre devuelve un string
-    
+    entrada = raw_input("Digite una opcion valida: ")   #raw_input siempre devuelve un string 
     
     #Opciones:
     if entrada == '1':                  #Opcion 1: mostrar el video en tiempo real
@@ -42,11 +41,14 @@ while True:
         menu.func_menu_opciones()       #Menu con las opciones
     
     elif entrada == '2':                #Configuracion de parametros de los espacios de estacionamiento
-        
-        if esp.cant_espacios() ==1:
+        k = esp.cant_espacios()
+        if  k==1:
             print'\n\nSe definieron los parametros satisfactoriamente...'
             time.sleep(2) 
-            
+        elif k==3:	#si retorna 3 significa que se cancelo la opcion de insertar parametros de los espacios
+			print "Cancelando..."
+			time.sleep(1)
+			
         else:
             print'Ocurrio un error...'
         
@@ -54,27 +56,27 @@ while True:
         
         menu.func_menu_opciones()
         
-    elif entrada == '3':
-        #print entrada
-        #time.sleep(2)
-        
-        #llama a la funcion de deteccion de vehiculos en un area definida (espacios de estacionamiento)
+    elif entrada == '3':	#Deteccion modo grafico
         deteccion.func_deteccion_vehiculos()    
-        
         menu.func_menu_opciones()
     
+	elif entrada == '4':	#definir parametros
+		deteccion.parametros_insert()
+		time.sleep(0.33)
+		menu.func_menu_opciones()
+		
+	elif entrada == '5':	#Deteccion en modo consola
+		deteccion.func_deteccion_vehiculos_consola()
+		menu.func_menu_opciones()
+		
     elif entrada == 'cerrar':
         menu.cerrando_logo()
         break
     
     else:
         print 'ERROR: Entrada invalida!'
+		print "/n"
         time.sleep(1)
-        
-        
-    
-    
-    
-    
+          
     
     

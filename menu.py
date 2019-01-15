@@ -96,16 +96,16 @@ def func_menu_opciones():
     print'                  | |                                     '
     print'                  |_|                                     '
     print'\n\n'
-    time.sleep(0.33)
+    time.sleep(0.2)
     print' ____ ____ ____ ____ ____ ____ ____ ____ ____ '
     print'||O |||p |||c |||i |||o |||n |||e |||s |||: ||'
     print'||__|||__|||__|||__|||__|||__|||__|||__|||__||'
     print'|/__\|/__\|/__\|/__\|/__\|/__\|/__\|/__\|/__\|'
     print'\n'
-    time.sleep(0.33)
+    time.sleep(0.2)
     print'NOTA: presione la tecla Q para salir de cualquiera de las opciones que seleccione'
     print'\n'
-    time.sleep(0.33)
+    time.sleep(0.2)
     try:
         print"Espacios de estacionamiento configurados: {}".format(esp.n_esp)
     except:
@@ -113,11 +113,15 @@ def func_menu_opciones():
     print'\n\n\n'
     time.sleep(0.33)
     print'1. Mostrar video en tiempo real'
-    time.sleep(0.33)
+    time.sleep(0.2)
     print'2. Configuracion de parametros de los espacios (Obligatorio)'
-    time.sleep(0.33)
-    print'3. Iniciar deteccion de vehiculos (Opcion 2 obligatoria)'
-    time.sleep(0.33)
+    time.sleep(0.2)
+    print'3. Iniciar deteccion de vehiculos [modo grafico] (Opcion 2 obligatoria)'
+    time.sleep(0.2)
+	print'4. Definir parametros (% video || IP || )'
+    time.sleep(0.2)
+	print'5. Iniciar deteccion de vehiculos [modo consola] (Opcion 2 obligatoria)'
+    time.sleep(0.2)
     print'\n'
     print'...o ingrese \"cerrar\" para cerrar el programa\n'
     
@@ -154,6 +158,9 @@ def cerrando_logo():
         os.system('clear')
 
 
+
+
+	
 
 #while true 
 
