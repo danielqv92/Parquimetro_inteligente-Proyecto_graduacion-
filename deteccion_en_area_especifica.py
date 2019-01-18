@@ -19,11 +19,13 @@ import ubidots_parking as ubi	#script que se encarga de enviar y recibir datos d
 import threading				#para utilizar hilos --> threads
 
 #Clasificador para automoviles
-clasificador_autos = cv2.CascadeClassifier('Haarcascades/autos_cascade.xml')
+#clasificador_autos = cv2.CascadeClassifier('Haarcascades/haarcascade_car.xml')
 
 #variables
 porc_video = 100	#porcentaje del video 100% por defecto
 ip_det = 'http://138.26.107.148/mjpg/video.mjpg?timestamp=1546935659075'	#ip por defecto
+
+path_haar = 'Haarcascades/haarcascade_car.xml'
 ############################...Funciones...#############################
 
 
@@ -33,7 +35,7 @@ def func_deteccion_vehiculos():
 	########################################################################
 	#cv2.namedWindow('Cuadro')
 	global porc_video, ip_det
-	
+	clasificador_autos=cv2.CascadeClassifier(path_haar)
 	#Iniciar video captura de un archivo de video para pruebas
 	
 	#fuente del video
@@ -119,6 +121,7 @@ def func_deteccion_vehiculos():
 					#pinta un rectangulo verde en el area de deteccion, verde significa que esta desocupado
 					cv2.rectangle(cuadro, (x_1, y_1), (x_2, y_2), (0, 255, 0), 2)	
 					#Clasificador
+					
 					autos = clasificador_autos.detectMultiScale(gris, 1.03, 2)
 					
 					estado = 0	#Estado del espacio de estacionamiento...
@@ -209,6 +212,7 @@ def func_deteccion_vehiculos_consola():
 	#cv2.namedWindow('Cuadro')
 	global porc_video, ip_det
 	
+	clasificador_autos=cv2.CascadeClassifier(path_haar)
 	#Iniciar video captura de un archivo de video para pruebas
 	
 	#fuente del video

@@ -11,18 +11,28 @@ Fecha:18 de diciembre del 2018
 @Siguiente paso: detectar en espacio especifico
 """
 #Headers a utilizar:
+import sys
+sys.path.append('/usr/local/lib/python2.7/site-packages')	#para evitar que python no encuentre el path de cv2... pasa muy seguido
 import cv2
 import time
 import numpy as np
 import menu                      #importa el script menu.py que contiene el menu inicial y el de opciones...
 import video_camara as vidcam    #script que muestra el video en tiempo real (para tomar datos de posicion)
 import menu_espacios as esp      #script que guarda la cantidad de espacios de estacionamiento y los parametros de cada uno
+import dill					     #para guardar la sesion
 
 #script que contiene el codigo necesario para detectar vehiculos dentro de los espacios definidos:
 import deteccion_en_area_especifica as deteccion    
 
 
-                            
+#Archivo para guardar datos de la sesion--> variables, etc...
+archivo_main = 'tmp_main.pkl'
+try:
+	#espacio_estacionamiento = pickle.load(open("lista_espacios.dat","rb"))
+	dill.load_session(archivo_main)				#carga el archivo con el nombre y extension
+	print "Archivo de sesion cargado"
+except:
+	print "No hay archivo de sesion que cargar..."
 
 
     
@@ -44,7 +54,8 @@ while True:
         k = esp.cant_espacios()
         if  k==1:
             print'\n\nSe definieron los parametros satisfactoriamente...'
-            time.sleep(2) 
+            dill.dump_session(archivo_main)			#Guarda datos de sesion...			
+            time.sleep(1) 
         elif k==3:	#si retorna 3 significa que se cancelo la opcion de insertar parametros de los espacios
 			print "Cancelando..."
 			time.sleep(1)
@@ -62,6 +73,7 @@ while True:
     
     elif entrada == '4':	#definir parametros
 	deteccion.parametros_insert()
+	dill.dump_session(archivo_main)			#Guarda datos de sesion...
 	time.sleep(0.33)
 	menu.func_menu_opciones()
 	    
