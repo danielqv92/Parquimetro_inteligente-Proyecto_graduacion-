@@ -123,7 +123,7 @@ def func_menu_opciones():
     time.sleep(0.2)
     print'3. Iniciar deteccion de vehiculos [modo grafico] (Opcion 2 obligatoria)'
     time.sleep(0.2)
-    print'4. Definir parametros (% video || IP || )'
+    print'4. Definir parametros (% video || IP)'
     time.sleep(0.2)
     print'5. Iniciar deteccion de vehiculos [modo consola] (Opcion 2 obligatoria)'
     time.sleep(0.2)

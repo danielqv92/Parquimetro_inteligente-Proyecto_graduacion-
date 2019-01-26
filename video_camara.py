@@ -39,10 +39,7 @@ def func_video_camara():
 	cv2.setMouseCallback('Cuadro', coordenada_puntero)
 
 	#Iniciar video captura de un archivo de video para pruebas
-	#captura = cv2.VideoCapture('http://87.243.137.233/axis-cgi/mjpg/video.cgi?camera=?resolution=640x480')
-	
 	captura = cv2.VideoCapture(deteccion.ip_det)
-	#captura = cv2.VideoCapture('images/parqueo.mp4')
 	
 	#Si el video abre correctamente se inicia el siguiente loop
 	while captura.isOpened():
@@ -52,7 +49,7 @@ def func_video_camara():
 		ret, cuadro = captura.read() #captura cuadro por cuadro
 		
 		#Filtros:
-		cuadro = cv2.GaussianBlur(cuadro,(5,5),0)
+		#cuadro = cv2.GaussianBlur(cuadro,(5,5),0)
 		
 		#Rescalar la imagen:
 		porcentaje = 60

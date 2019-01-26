@@ -46,7 +46,7 @@ def func_deteccion_vehiculos():
 	#Si el video abre correctamente se inicia el siguiente loop
 	while captura.isOpened():
 
-		time.sleep(3)            #time sleep para ver el video más lento o menos captura de tomas en tiempo real
+		#time.sleep(3)            #time sleep para ver el video más lento o menos captura de tomas en tiempo real
 		#ademas el delay funciona para no saturar el envio a la nube
 		# Lee el primer cuadro:
 		ret, cuadro = captura.read() #captura cuadro por cuadro
@@ -69,13 +69,6 @@ def func_deteccion_vehiculos():
 		#Si hay captura entonces ret=True
 		if ret:
 			
-			#gris = cv2.cvtColor(cuadro, cv2.COLOR_BGR2GRAY)
-			
-			
-			#for c in range (0,11):
-				
-			# Pasa el cuadro por nuestro clasificador de autos
-			#autos = clasificador_autos.detectMultiScale(gris, 1.1, 1)
 			
 			
 			'''
@@ -122,20 +115,25 @@ def func_deteccion_vehiculos():
 					cv2.rectangle(cuadro, (x_1, y_1), (x_2, y_2), (0, 255, 0), 2)	
 					#Clasificador
 					
-					autos = clasificador_autos.detectMultiScale(gris, 1.03, 2)
+					autos = clasificador_autos.detectMultiScale(gris, 1.03, 3)
 					
 					estado = 0	#Estado del espacio de estacionamiento...
 					#si detecta el objeto devuelve las coordenadas:
 					for (x,y,w,h) in autos:
+						#nuevas coordendas de x & y para poder comparar ya que esto es un recorte de la imagen original
+						x= x + x_1
+						y= y + y_1
 						x2 = x + w	#coordenada x
 						y2 = y + h	#coordenada y
 						#Dibuja un rectangulo donde detecta el vehiculo (amarillo)
-						cv2.rectangle(cuadro, (x_1+x, y_1+y), (x_1+x+w, y_1+y+h), (0, 255, 255), 2)	
+						cv2.rectangle(cuadro, (x, y), (x+w, y+h), (0, 255, 255), 2)	
 						#cambiar a un solo if, por ahora de prueba
+						#print "x2={} xc={} x={} ".format(x2,x_c,x)
+						#print "y2={} yc={} y={} ".format(y2,y_c,y)
 						if x2>x_c>x:
-							print "Si calza con x"
-							if y2>x_c>y:
-								print "Tambien con y"
+							#print "Si calza con x"
+							if y2>y_c>y:
+								#print "Tambien con y"
 								estado = 1			#detecto un auto en el punto especificado!
 								#pinta un rectangulo rojo en el area de deteccion, rojo significa que esta ocupado
 								cv2.rectangle(cuadro, (x_1, y_1), (x_2, y_2), (0, 0, 255), 2)
@@ -147,9 +145,9 @@ def func_deteccion_vehiculos():
 						hilo_ubidots = threading.Thread (target = ubi.enviar_ubidots, name= "hilo", args = (ID, estado, latitud, longitud,))
 						hilo_ubidots.start()	#inicia el thread 
 					
-					else:	#esta condicion nunca deberia de ejecutarse...
-						print "Se evito que se crearan muchos hilos"
-						print ubi.contador_hilos
+					#else:	#esta condicion nunca deberia de ejecutarse...
+						#print "Se evito que se crearan muchos hilos"
+						#print ubi.contador_hilos
 			#luego de "dibujar" todos los rectangulos en un cuadro, muestra la imagen final:	
 			cv2.imshow('cuadro', cuadro)
 			#cv2.waitKey()
@@ -297,19 +295,22 @@ def func_deteccion_vehiculos_consola():
 					
 					
 					#Clasificador
-					autos = clasificador_autos.detectMultiScale(gris, 1.03, 2)
+					autos = clasificador_autos.detectMultiScale(gris, 1.03, 3)
 					
 					estado = 0		#Estado del espacio de estacionamiento...
 					#si detecta el objeto devuelve las coordenadas:
 					for (x,y,w,h) in autos:
+						#nuevas coordendas de x & y para poder comparar ya que esto es un recorte de la imagen original
+						x= x + x_1
+						y= y + y_1
 						x2 = x + w	#coordenada x
 						y2 = y + h	#coordenada y
 						
 						#cambiar a un solo if, por ahora de prueba
 						if x2>x_c>x:
-							print "Si calza con x"
-							if y2>x_c>y:
-								print "Tambien con y"
+							#print "Si calza con x"
+							if y2>y_c>y:
+								#print "Tambien con y"
 								estado = 1				#detecto un auto en el punto especificado!
 								
 					

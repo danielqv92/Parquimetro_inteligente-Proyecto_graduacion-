@@ -12,7 +12,8 @@ Fecha:18 de diciembre del 2018
 """
 #Headers a utilizar:
 import sys
-sys.path.append('/usr/local/lib/python2.7/site-packages')	#para evitar que python no encuentre el path de cv2... pasa muy seguido
+sys.path.append('/usr/local/lib/python2.7/dist-packages')	#para evitar que python no encuentre el path de cv2... pasa muy seguido 
+#si no funciona cambiar dist por site
 import cv2
 import time
 import numpy as np
