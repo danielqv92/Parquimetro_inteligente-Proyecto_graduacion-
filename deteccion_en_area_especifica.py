@@ -21,20 +21,25 @@ import threading				#para utilizar hilos --> threads
 #Clasificador para automoviles
 #clasificador_autos = cv2.CascadeClassifier('Haarcascades/haarcascade_car.xml')
 
-#variables
+#----------------------------variables----------------------------
 porc_video = 100	#porcentaje del video 100% por defecto
 ip_det = 'http://138.26.107.148/mjpg/video.mjpg?timestamp=1546935659075'	#ip por defecto
 
-path_haar = 'Haarcascades/haarcascade_car.xml'
+#para detectMultiscale
+factor_escala = 1.03	
+minNeighbors = 5
+
+path_haar = 'Haarcascades/haar_autos_v2.1.xml'
 ############################...Funciones...#############################
 
-
+n_test = 0			#contador para guardar imagen cada n veces, esto para probar eficiencia guardando img con deteccion final
+contador_img = 1	#para guardar las imagenes con nombres--> 1,2,3,...,n
 
 #Funcion que debo llamar en el main.py para 
 def func_deteccion_vehiculos():
 	########################################################################
 	#cv2.namedWindow('Cuadro')
-	global porc_video, ip_det
+	global porc_video, ip_det, n_test, contador_img, factor_escala, minNeighbors
 	clasificador_autos=cv2.CascadeClassifier(path_haar)
 	#Iniciar video captura de un archivo de video para pruebas
 	
@@ -61,23 +66,16 @@ def func_deteccion_vehiculos():
 		dimensiones = (ancho, alto)
 		cuadro = cv2.resize(cuadro, dimensiones, interpolation = cv2.INTER_AREA)
 			
-		#cuadro = cv2.Canny(cuadro, 100, 300)	#no funciona ...
-			
-		#if punto1 and punto2:
-		#    cv2.rectangle(cuadro, punto1, punto2, (0, 255, 0),2)
 		
 		#Si hay captura entonces ret=True
 		if ret:
 			
+			#~ Si identifica autos devolvera las coordenadas (x,y), ademas de el ancho y el alto del area de deteccion.
+			#~ Primero se dibujara un rectangulo alrededor de dichas coordenadas y luego se comparara si parte de este 
+			#~ se encuentra dentro del area de algun espacio de estacionamiento definido en la opcion 2 del sistema, de
+			#~ ser asi se dibujara un rectangulo de color rojo y se cambiara el estado del espacio a True (espacio ocupado).
+			#~ Para los espacios donde no se detecte un auto la condicion sera False y se dibujara un rectangulo de color verde
 			
-			
-			'''
-			 Si identifica autos devolvera las coordenadas (x,y), ademas de el ancho y el alto del area de deteccion.
-			 Primero se dibujara un rectangulo alrededor de dichas coordenadas y luego se comparara si parte de este 
-			se encuentra dentro del area de algun espacio de estacionamiento definido en la opcion 2 del sistema, de
-			ser asi se dibujara un rectangulo de color rojo y se cambiara el estado del espacio a True (espacio ocupado).
-			 Para los espacios donde no se detecte un auto la condicion sera False y se dibujara un rectangulo de color verde
-			'''
 			try:
 				esp.n_esp = esp.n_esp
 			except:
@@ -115,7 +113,7 @@ def func_deteccion_vehiculos():
 					cv2.rectangle(cuadro, (x_1, y_1), (x_2, y_2), (0, 255, 0), 2)	
 					#Clasificador
 					
-					autos = clasificador_autos.detectMultiScale(gris, 1.03, 3)
+					autos = clasificador_autos.detectMultiScale(gris, factor_escala, minNeighbors)
 					
 					estado = 0	#Estado del espacio de estacionamiento...
 					#si detecta el objeto devuelve las coordenadas:
@@ -128,8 +126,8 @@ def func_deteccion_vehiculos():
 						#Dibuja un rectangulo donde detecta el vehiculo (amarillo)
 						cv2.rectangle(cuadro, (x, y), (x+w, y+h), (0, 255, 255), 2)	
 						#cambiar a un solo if, por ahora de prueba
-						#print "x2={} xc={} x={} ".format(x2,x_c,x)
-						#print "y2={} yc={} y={} ".format(y2,y_c,y)
+						#~ print "x2={} xc={} x={} ".format(x2,x_c,x)
+						#~ print "y2={} yc={} y={} ".format(y2,y_c,y)
 						if x2>x_c>x:
 							#print "Si calza con x"
 							if y2>y_c>y:
@@ -150,6 +148,17 @@ def func_deteccion_vehiculos():
 						#print ubi.contador_hilos
 			#luego de "dibujar" todos los rectangulos en un cuadro, muestra la imagen final:	
 			cv2.imshow('cuadro', cuadro)
+			
+			#guardar la imagen cada n veces:
+			#~ if n_test == 250:
+				#~ ruta = '/home/daniel/Documents/Parquimetro_inteligente-Proyecto_graduacion-/test_img/imagen_%s.png'%contador_img
+				#~ print ruta
+				#~ cv2.imwrite(ruta, cuadro)
+				#~ n_test = 0
+				#~ contador_img += 1
+			#~ else:
+				#~ n_test += 1
+			
 			#cv2.waitKey()
 			 
 			
@@ -168,20 +177,25 @@ def func_deteccion_vehiculos():
 
 	print "Se cerro el video"	#sale del while
 
-
 	captura.release()
 	cv2.destroyAllWindows()
 	return 0
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
 
 def parametros_insert():
-	global porc_video, ip_det
+	global porc_video, ip_det, factor_escala, minNeighbors
 	time.sleep(0.3)
 	print "\n--------------------------------------------------"
-	print "Valores por defecto:"
+	print "Valores por defecto:\n"
 	print "Porcentaje de video: {}".format(porc_video)
 	print "IP: {}".format(ip_det)
+	print "TOKEN: {}".format(ubi.TOKEN)
+	print "Factor de escala (Deteccion): {}".format(factor_escala)
+	print "Min Neighbors (Deteccion): {}".format(minNeighbors)
 	print "\nOpciones:"
-	print "1. Porcentaje de video \n2. IP de la camara\n3. Cancelar"
+	print "1. Porcentaje de video \n2. IP de la camara\n3. TOKEN de Ubidots\n4. Factor de escala\n5. Min Neighbors\n6. Cancelar"
 	k = True
 	while k:	#con un while True basta pero por si las dudas...
 		opcion = int(raw_input("Digite una opcion valida:"))
@@ -194,6 +208,20 @@ def parametros_insert():
 			k = False
 			return 0
 		elif opcion == 3:
+			token_ubi = raw_input("Inserte el TOKEN de UBIDOTS: ")
+			ubi.cambiar_token(token_ubi)
+			#time.sleep(2)
+			k = False
+			return 1
+		elif opcion == 4:
+			factor_escala = float(raw_input("Inserte el factor de escala de la deteccion: "))
+			k = False
+			return 0
+		elif opcion == 5:
+			minNeighbors = int(raw_input("Inserte los minNeighbors de la deteccion: "))
+			k = False
+			return 0
+		elif opcion == 6:
 			print "Cancelando..."
 			time.sleep(2)
 			k = False
@@ -208,7 +236,7 @@ def parametros_insert():
 def func_deteccion_vehiculos_consola():
 	########################################################################
 	#cv2.namedWindow('Cuadro')
-	global porc_video, ip_det
+	global porc_video, ip_det, factor_escala, minNeighbors
 	
 	clasificador_autos=cv2.CascadeClassifier(path_haar)
 	#Iniciar video captura de un archivo de video para pruebas
@@ -236,11 +264,6 @@ def func_deteccion_vehiculos_consola():
 		dimensiones = (ancho, alto)
 		cuadro = cv2.resize(cuadro, dimensiones, interpolation = cv2.INTER_AREA)
 			
-		#cuadro = cv2.Canny(cuadro, 100, 300)	#no funciona ...
-			
-		#if punto1 and punto2:
-		#    cv2.rectangle(cuadro, punto1, punto2, (0, 255, 0),2)
-		
 		#Si hay captura entonces ret=True
 		if ret:
 			
@@ -253,13 +276,13 @@ def func_deteccion_vehiculos_consola():
 			#autos = clasificador_autos.detectMultiScale(gris, 1.1, 1)
 			
 			
-			'''
-			 Si identifica autos devolvera las coordenadas (x,y), ademas de el ancho y el alto del area de deteccion.
-			 Primero se dibujara un rectangulo alrededor de dichas coordenadas y luego se comparara si parte de este 
-			se encuentra dentro del area de algun espacio de estacionamiento definido en la opcion 2 del sistema, de
-			ser asi se dibujara un rectangulo de color rojo y se cambiara el estado del espacio a True (espacio ocupado).
-			 Para los espacios donde no se detecte un auto la condicion sera False y se dibujara un rectangulo de color verde
-			'''
+			
+			#~ Si identifica autos devolvera las coordenadas (x,y), ademas de el ancho y el alto del area de deteccion.
+		    #~ Primero se dibujara un rectangulo alrededor de dichas coordenadas y luego se comparara si parte de este 
+			#~ se encuentra dentro del area de algun espacio de estacionamiento definido en la opcion 2 del sistema, de
+			#~ ser asi se dibujara un rectangulo de color rojo y se cambiara el estado del espacio a True (espacio ocupado).
+			#~ Para los espacios donde no se detecte un auto la condicion sera False y se dibujara un rectangulo de color verde
+			
 			try:
 				esp.n_esp = esp.n_esp
 			except:
@@ -295,7 +318,7 @@ def func_deteccion_vehiculos_consola():
 					
 					
 					#Clasificador
-					autos = clasificador_autos.detectMultiScale(gris, 1.03, 3)
+					autos = clasificador_autos.detectMultiScale(gris, factor_escala, minNeighbors)
 					
 					estado = 0		#Estado del espacio de estacionamiento...
 					#si detecta el objeto devuelve las coordenadas:

@@ -69,11 +69,13 @@ while True:
         menu.func_menu_opciones()
         
     elif entrada == '3':	#Deteccion modo grafico
-        deteccion.func_deteccion_vehiculos()    
+        deteccion.func_deteccion_vehiculos() 
+        
         menu.func_menu_opciones()
     
     elif entrada == '4':	#definir parametros
 	deteccion.parametros_insert()
+	deteccion.contador_img = 1   			#para resetear el contador de imagenes para guardar img de prueba...
 	dill.dump_session(archivo_main)			#Guarda datos de sesion...
 	time.sleep(0.33)
 	menu.func_menu_opciones()
